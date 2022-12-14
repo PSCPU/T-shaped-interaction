@@ -273,16 +273,19 @@ Begining of Part2 - Determining Stacks And Calculating Parameters
 """
 print("Determining Stacks....")
 def con_dist(key1,key2): #To check whether the two nucleotides are consecutive or distant
+	key3 = key1.split('_')[-2]
+	key4 = key2.split('_')[-2]
 	key1 = key1.split('_')[0]
 	key1 = float(re.split('[a-zA-z]+',key1)[0]) # Some nucleotide numbers are alphanumeric. Considering only the numeric part.
 	key2 = key2.split('_')[0]
 	key2 = float(re.split('[a-zA-z]+',key2)[0]) # Some nucleotide numbers are alphanumeric. Considering only the numeric part.
-	if key1==key2:
-		return "inter-chain"
-	elif(abs(key1-key2)>1):
+	if str(key3)!=str(key4):
+		return "inter-RNA"
+	if(abs(key1-key2)>1):
 		return "non-consecutive"
 	else:
 		return "consecutive"
+
 
 """
 If the C1'-center1-center2-C1' torsion angle is < 90 then its CIS else its TRANS.

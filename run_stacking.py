@@ -23,7 +23,7 @@ file_names = [x for x in directory_list if ('.pdb' in x) or ('.cif' in x)]
 
 # p = '/usr/bin/python2.7 ' #Path of the python executable with latest version of numpy installed LOCAL.
 # p = 'python ' #Python executable on the SERVER
-p = sys.executable
+p = 'python '
 F = FOLDER
 count = 1
 for file_name in file_names:
@@ -35,8 +35,8 @@ for file_name in file_names:
 		os.system("mkdir " + FOLDER + name)
 	os.system(p + " code_mmcif.py " + FOLDER + file_name)
 	FOLDER = FOLDER + name + '/'
-	os.system("mv ring_ring " + FOLDER + name + "_ring_ring")
-	os.system("mv ring_ring_angles " + FOLDER + name + "_ring_ring_angles")
+	os.system("move ring_ring " + FOLDER + name + "_ring_ring")
+	os.system("move ring_ring_angles " + FOLDER + name + "_ring_ring_angles")
 	# os.system("mv base_base_step_parameters " + FOLDER + name + "_base_base_step_parameters")
 	os.system(p + " consolidate.py " + FOLDER + name + " > " + FOLDER + name + '_base_base')
 	os.system(p + " sigma_distribution.py " + FOLDER + name + " > " + FOLDER + name + '_base_base_alphaBeta')
