@@ -168,10 +168,10 @@ for key in list(nucAtoms.keys()):
 	x1=y1=z1=x2=y2=z2=x5=y5=z5=x6=y6=z6=x9=y9=z9=0.0
 	nuc = key.split('_')[1]
 	if nuc in pur:
-		key6 = key + '_6' #Key for storing 6 membered ring:
+		keyp6 = key + '_6' #Key for storing 6 membered ring:
 		key5 = key + '_5' #Key for storing the 5 membered ring
 		key9 = key + '_9' #Key for storing the 9 membered ring 
-		nucRings[key6]={}
+		nucRings[keyp6]={}
 		nucRings[key5]={}
 		pu9Ring[key9]={} 
 
@@ -188,26 +188,27 @@ for key in list(nucAtoms.keys()):
 			y9+=float(nucAtoms[key][atm][1]) 
 			z9+=float(nucAtoms[key][atm][2]) 
 
-		nucRings[key6]['center'] = [format(x6/6,'.4f'),format(y6/6,'.4f'),format(z6/6,'.4f')] #Storing the center of 6 membered ring
+		nucRings[keyp6]['center'] = [format(x6/6,'.4f'),format(y6/6,'.4f'),format(z6/6,'.4f')] #Storing the center of 6 membered ring
 		nucRings[key5]['center'] = [format(x5/5,'.4f'),format(y5/5,'.4f'),format(z5/5,'.4f')] #Storing the center of 5 membered ring
 		pu9Ring[key9]['center'] = [format(x9/9,'.4f'),format(y9/9,'.4f'),format(z9/9,'.4f')] #Storing the center of 9 membered ring 
-		nucRings[key6]['gly_center'] = nucRings[key5]['center'] 
+		nucRings[keyp6]['gly_center'] = nucRings[key5]['center'] 
 		nucRings[key5]['gly_center'] = nucRings[key5]['center'] 
 		pu9Ring[key9]['gly_center'] = nucRings[key5]['center'] 
 
 		#Storing the position vectors of the atoms, center, r1, r2 and normal(n) of the 6-membered ring of purines
 		for atm in atom6: 
 			# nucRings[key6][atm] = list(map(sub,list(map(float,nucAtoms[key][atm])),list(map(float,nucRings[key6]['center'])))) #Storing the position vector of atoms with center as origin in 6 membered ring of purines
-			nucRings[key6][atm] = list(map(sub, [float(x) for x in nucAtoms[key][atm]], [float(x) for x in nucRings[key6]['center']]))
-			x1=x1+(float(nucRings[key6][atm][0])*math.sin((2*pi*atom6.index(atm))/6))
-			y1=y1+(float(nucRings[key6][atm][1])*math.sin((2*pi*atom6.index(atm))/6))
-			z1=z1+(float(nucRings[key6][atm][2])*math.sin((2*pi*atom6.index(atm))/6))
-			x2=x2+(float(nucRings[key6][atm][0])*math.cos((2*pi*atom6.index(atm))/6))
-			y2=y2+(float(nucRings[key6][atm][1])*math.cos((2*pi*atom6.index(atm))/6))
-			z2=z2+(float(nucRings[key6][atm][2])*math.cos((2*pi*atom6.index(atm))/6))
-		nucRings[key6]['r1'] = normalize([format(x1,'.4f'),format(y1,'.4f'),format(z1,'.4f')])
-		nucRings[key6]['r2'] = normalize([format(x2,'.4f'),format(y2,'.4f'),format(z2,'.4f')])
-		nucRings[key6]['n'] = normalize(cross(nucRings[key6]['r1'],nucRings[key6]['r2']))
+			nucRings[keyp6][atm] = list(map(sub, [float(x) for x in nucAtoms[key][atm]], [float(x) for x in nucRings[keyp6]['center']]))
+			x1=x1+(float(nucRings[keyp6][atm][0])*math.sin((2*pi*atom6.index(atm))/6))
+			y1=y1+(float(nucRings[keyp6][atm][1])*math.sin((2*pi*atom6.index(atm))/6))
+			z1=z1+(float(nucRings[keyp6][atm][2])*math.sin((2*pi*atom6.index(atm))/6))
+			x2=x2+(float(nucRings[keyp6][atm][0])*math.cos((2*pi*atom6.index(atm))/6))
+			y2=y2+(float(nucRings[keyp6][atm][1])*math.cos((2*pi*atom6.index(atm))/6))
+			z2=z2+(float(nucRings[keyp6][atm][2])*math.cos((2*pi*atom6.index(atm))/6))
+		nucRings[keyp6]['r1'] = normalize([format(x1,'.4f'),format(y1,'.4f'),format(z1,'.4f')])
+		nucRings[keyp6]['r2'] = normalize([format(x2,'.4f'),format(y2,'.4f'),format(z2,'.4f')])
+		nucRings[keyp6]['n'] = normalize(cross(nucRings[keyp6]['r1'],nucRings[keyp6]['r2']))
+		nucRings[keyp6]['m'] = normalize(cross(nucRings[keyp6]['r2'],nucRings[keyp6]['r1']))
 		x1=y1=z1=x2=y2=z2=0.0
 		#Storing the position vectors of the atoms, center, r1, r2 and normal(n) of the 5-membered ring of purines
 		for atm in atom5:
@@ -223,6 +224,7 @@ for key in list(nucAtoms.keys()):
 		nucRings[key5]['r1'] = normalize([format(x1,'.4f'),format(y1,'.4f'),format(z1,'.4f')])
 		nucRings[key5]['r2'] = normalize([format(x2,'.4f'),format(y2,'.4f'),format(z2,'.4f')])
 		nucRings[key5]['n'] = normalize(cross(nucRings[key5]['r2'],nucRings[key5]['r1']))
+		nucRings[key5]['m'] = normalize(cross(nucRings[key5]['r1'],nucRings[key5]['r2']))
 
 		#Storing the position vectors of the atoms, center, r1, r2 and normal(n) of the 9-membered ring of purines
 		for atm in atom9:
@@ -239,6 +241,7 @@ for key in list(nucAtoms.keys()):
 		pu9Ring[key9]['r1'] = normalize([format(x1,'.4f'),format(y1,'.4f'),format(z1,'.4f')])
 		pu9Ring[key9]['r2'] = normalize([format(x2,'.4f'),format(y2,'.4f'),format(z2,'.4f')])
 		pu9Ring[key9]['n'] = normalize(cross(pu9Ring[key9]['r2'],pu9Ring[key9]['r1']))
+		pu9Ring[key9]['m'] = normalize(cross(pu9Ring[key9]['r1'],pu9Ring[key9]['r2']))
 		
 
 	# elif nuc=='U' or nuc=='C':
@@ -265,6 +268,7 @@ for key in list(nucAtoms.keys()):
 		nucRings[key6]['r1'] = normalize([format(x1,'.4f'),format(y1,'.4f'),format(z1,'.4f')])
 		nucRings[key6]['r2'] = normalize([format(x2,'.4f'),format(y2,'.4f'),format(z2,'.4f')])
 		nucRings[key6]['n'] = normalize(cross(nucRings[key6]['r1'],nucRings[key6]['r2']))
+		nucRings[key6]['m'] = normalize(cross(nucRings[key6]['r1'],nucRings[key6]['r2']))
 
 """
 -------------------------------------------------------------------------------------------------------------------------------
@@ -285,7 +289,6 @@ def con_dist(key1,key2): #To check whether the two nucleotides are consecutive o
 		return "non-consecutive"
 	else:
 		return "consecutive"
-
 
 """
 If the C1'-center1-center2-C1' torsion angle is < 90 then its CIS else its TRANS.
@@ -315,7 +318,7 @@ If the center1->center2 vector makes an angle > 90 with the normal of ring1 then
 Alpha face is the one from which the normal comes out.
 Beta face is the one from which the other side of alpha face.
 """
-def face_orientation(key1,key2):
+"""def face_orientation(key1,key2):
 	# dvec_c2_c1 = map(sub,map(float,nucRings[key1]['center']),map(float,nucRings[key2]['center'])) #vector direction from c1 to c2
 	dvec_c2_c1 = list(map(sub,[float(x) for x in nucRings[key1]['center']],[float(x) for x in nucRings[key2]['center']])) #vector direction from c1 to c2
 	a = angle(nucRings[key1]['n'],dvec_c2_c1)
@@ -330,7 +333,7 @@ def face_orientation(key1,key2):
 		f2='alpha'
 	else:
 		f2='beta'
-	return [f1,f2]	
+	return [f1,f2]"""	
 
 def get_centroid(key1, atom_list):
 	center_x = center_y = center_z = 0
@@ -346,19 +349,43 @@ def get_edge_centroids(key):
 	base_nuc = key.split('_')[1]
 	key_atoms = '_'.join(key.split('_')[:3])
 
-	wc_edge = get_centroid(key_atoms, face_atom_map[base_nuc]['WC'])
-	h_edge = get_centroid(key_atoms, face_atom_map[base_nuc]['H'])
-	s_edge = get_centroid(key_atoms, face_atom_map[base_nuc]['S'])
+	wc_edge_centroid = get_centroid(key_atoms, face_atom_map[base_nuc]['WC'])
+	h_edge_centroid = get_centroid(key_atoms, face_atom_map[base_nuc]['H'])
+	s_edge_centroid = get_centroid(key_atoms, face_atom_map[base_nuc]['S'])
 
-	return wc_edge, h_edge, s_edge
+	return wc_edge_centroid, h_edge_centroid, s_edge_centroid
 
-def get_edge(key, wc_edge, h_edge, s_edge):
+
+def get_closest_atom(horizontal_key, verticle_key):
+	"""
+	Function to determine the closest atom
+	to the horizontal base.
+	We fetch the closest atom irrespective of the closest edge
+	"""
+	horizontal_center = nucRings[horizontal_key]['center']
+	
+	verticle_base_nuc = verticle_key.split('_')[1]
+	verticle_key_atoms = '_'.join(verticle_key.split('_')[:3])
+
+	closest_atom_dist = None
+	closest_atom_name = None
+	for verticle_edge in ['WC','H','S']:
+		atom_list = face_atom_map[verticle_base_nuc][verticle_edge]
+		for atom in atom_list:
+			vec = list(map(sub,[float(x) for x in horizontal_center], [float(x) for x in nucAtoms[verticle_key_atoms][atom]]))
+			atom_dist = cal_mod(vec)
+			if (not closest_atom_dist) or (atom_dist < closest_atom_dist):
+				closest_atom_dist = atom_dist
+				closest_atom_name = atom
+	return closest_atom_name
+
+def get_edge(key, wc_edge_centroid, h_edge_centroid, s_edge_centroid):
 	center = nucRings[key]['center']
-	wc_vec = list(map(sub,[float(x) for x in center],[float(x) for x in wc_edge]))
+	wc_vec = list(map(sub,[float(x) for x in center],[float(x) for x in wc_edge_centroid]))
 	wc_dist = cal_mod(wc_vec)
-	h_vec = list(map(sub,[float(x) for x in center],[float(x) for x in h_edge]))
+	h_vec = list(map(sub,[float(x) for x in center],[float(x) for x in h_edge_centroid]))
 	h_dist = cal_mod(h_vec)
-	s_vec = list(map(sub,[float(x) for x in center],[float(x) for x in s_edge]))
+	s_vec = list(map(sub,[float(x) for x in center],[float(x) for x in s_edge_centroid]))
 	s_dist = cal_mod(s_vec)
 
 	if wc_dist < h_dist and wc_dist < s_dist:
@@ -373,14 +400,16 @@ def get_edge(key, wc_edge, h_edge, s_edge):
 
 def face_orientation_tshape(key1, key2, horizontal, vertical):
 	dvec_h_v = list(map(sub,[float(x) for x in nucRings[horizontal]['center']],[float(x) for x in nucRings[vertical]['center']])) #vector direction from c1 to c2
-	a = angle(nucRings[horizontal]['n'],dvec_h_v)
+	a = angle(nucRings[horizontal]['m'],dvec_h_v)
 	if float(a)>90.0:
 		f1='alpha'
 	else:
 		f1='beta'
 
-	wc_dist, h_dist, s_dist = get_edge_centroids(vertical) 
-	f2, face_edge_dist = get_edge(horizontal, wc_dist, h_dist, s_dist)
+	wc_edge_centroid, h_edge_centroid, s_edge_centroid = get_edge_centroids(vertical)
+	closest_atom = get_closest_atom(horizontal, vertical)
+	f2, face_edge_dist = get_edge(horizontal, wc_edge_centroid, h_edge_centroid, s_edge_centroid)
+	f2 = f2 + '(' + str(closest_atom) + ')'
 	if horizontal == key2 and vertical == key1:
 		f1,f2 = f2,f1
 	return [f1,f2,face_edge_dist]
