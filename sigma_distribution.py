@@ -43,13 +43,6 @@ def generate_key2(line,pdb): #Always starts with lower nucleotide number/name/ch
 	key = num1 + '_' + nuc1 + '_' + chain1 + '_' + num2 + '_' + nuc2 + '_' + chain2 + '_' + pdb
 	return key
 
-def check_face(line,face):
-	num1,nuc1,chain1 = line[0],line[1],line[2]
-	num2,nuc2,chain2 = line[3],line[4],line[5]
-	f1,f2 = face.split('-')
-	if ((nuc1==nuc2) and f1>f2):
-		f1,f2 = f2,f1
-	return f1+'-'+f2
 
 def get_parameters(b,pdb):
 	store = {}
@@ -103,7 +96,6 @@ for pdb in pdb_list:
 		face = line_parts[8]
 		topo = line_parts[-1]
 		key = generate_key(line_parts[:6],pdb)
-		face = check_face(line_parts[:6],face)
 		if key not in final_store[pdb]:
 			final_store[pdb][key] = {}
 			final_store[pdb][key]['topology'] = topo
