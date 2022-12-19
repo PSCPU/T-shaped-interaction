@@ -13,5 +13,5 @@ This will create files for each PDB structure in the PDBfiles folder.
    
    
    
-   Note: You may need to install modules like numpy and inf which can be done using "pip install numpy" and "pio intsall inf" in your terminal before you run the code
+   Note: You may need to install modules like numpy and inf which can be done using "pip install numpy" and "pip intsall inf" in your terminal before you run the code
 
