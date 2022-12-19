@@ -10,4 +10,5 @@ To run the code in a terminal go through the following steps.
 This will create files for each PDB structure in the PDBfiles folder.
 5. To consolidate all the data into a single text files
          >>>Python consolidate_stack.py PDBfile/
+   Note: You may need to install modules like numpy and inf which can be done using "pip install numpy" and "pio intsall inf" in your terminal before you run the code
 
