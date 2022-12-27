@@ -125,7 +125,7 @@ fo1.close()
 fo2.close()
 
 sys.stdout = open("tshpaed1.txt", "w")
-print('pdb\tnum\tnuc\tchain\tnum\tnuc\tchain\tconsecutive/distant\tcis/trans\tface\ttopology\tdistance\ttheta\ttaui\ttauj\tsigma')
+print('pdb\tnum\tnuc\tchain\tnum\tnuc\tchain\tconsecutive/non-consecutive\tcis/trans\tface-edge\ttopology\tdistance\ttheta\ttaui\ttauj\tsigma')
 for pdb in pdb_list:
 	for key in final_store[pdb]:
 		stack = key.split('_')[:-1]

@@ -38,32 +38,32 @@ baseBaseStepParams = {} #Stores the base-base stacking interaction step paramete
 processed = [] #Stores the visited pairs of nucleotides
 face_atom_map = {
 	'A': {
-		'WC': ['N1', 'C2', 'N6'],
+		'W': ['N1', 'C2', 'N6'],
 		'H': ['N6', 'N7', 'C8'],
 		'S': ['N3', 'C2', "O2'"],
 	},
     '1MA': {
-		'WC': ['N1', 'C2', 'N6'],
+		'W': ['N1', 'C2', 'N6'],
 		'H': ['N6', 'N7', 'C8'],
 		'S': ['N3', 'C2', "O2'"],
 	},
 	'G': {
-		'WC': ['N1', 'N2', 'O6'],
+		'W': ['N1', 'N2', 'O6'],
 		'H': ['O6', 'N7', 'C8'],
 		'S': ['N2', 'N3', "O2'"],
 	},
 	'C': {
-		'WC': ['O2', 'N3', 'N4'],
+		'W': ['O2', 'N3', 'N4'],
 		'H': ['N4', 'C5', 'C6'],
 		'S': ['O2', "O2'"],
 	},
     'PSU': {
-		'WC': ['O2', 'N3', 'O4'],
+		'W': ['O2', 'N3', 'O4'],
 		'H': ['O4', 'N1', 'C6'],
 		'S': ['O2', "O2'"],
 	},
 	'U': {
-		'WC': ['O2', 'N3', 'O4'],
+		'W': ['O2', 'N3', 'O4'],
 		'H': ['O4', 'C5', 'C6'],
 		'S': ['O2', "O2'"],
 	}
@@ -359,7 +359,7 @@ def get_edge_centroids(key):
 	base_nuc = key.split('_')[1]
 	key_atoms = '_'.join(key.split('_')[:3])
 
-	wc_edge_centroid = get_centroid(key_atoms, face_atom_map[base_nuc]['WC'])
+	wc_edge_centroid = get_centroid(key_atoms, face_atom_map[base_nuc]['W'])
 	h_edge_centroid = get_centroid(key_atoms, face_atom_map[base_nuc]['H'])
 	s_edge_centroid = get_centroid(key_atoms, face_atom_map[base_nuc]['S'])
 
@@ -379,7 +379,7 @@ def get_closest_atom(horizontal_key, verticle_key):
 
 	closest_atom_dist = None
 	closest_atom_name = None
-	for verticle_edge in ['WC','H','S']:
+	for verticle_edge in ['W','H','S']:
 		atom_list = face_atom_map[verticle_base_nuc][verticle_edge]
 		for atom in atom_list:
 			vec = list(map(sub,[float(x) for x in horizontal_center], [float(x) for x in nucAtoms[verticle_key_atoms][atom]]))
@@ -399,7 +399,7 @@ def get_edge(key, wc_edge_centroid, h_edge_centroid, s_edge_centroid):
 	s_dist = cal_mod(s_vec)
 
 	if wc_dist < h_dist and wc_dist < s_dist:
-		return ['WC', wc_dist]
+		return ['W', wc_dist]
 	if h_dist < wc_dist and h_dist < s_dist:
 		return ['H', h_dist]
 	if s_dist < wc_dist and s_dist < h_dist:
