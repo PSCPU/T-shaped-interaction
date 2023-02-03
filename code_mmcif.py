@@ -12,20 +12,28 @@ import copy
 from operator import sub,add
 pi = math.pi
 
-atom = ['N1', 'N2', 'C2', 'N3', 'N4', 'C4', 'C5', 'C6', 'N6', 'N7', 'C8', 'N9', "C1'", 'O2', "O2'", 'O4', 'O6'] #List of all atoms whose coordinates should be extracted
+atom = ['N1', 'N2', 'C2', 'N3', 'N4', 'C4', 'C5', 'C6', 'N6', 'N7', 'C8', 'N9', "C1'", 'O2', "O2'",  "C2'",'O4', 'O6'] #List of all atoms whose coordinates should be extracted
 
 adenine_atoms = ['N1', 'C2', 'N3', 'C4', 'N9', 'C8', 'N7', 'C5', 'C6', "C1'", "O2'", 'N6']
 guanine_atoms = ['N1', 'C2', 'N3', 'C4', 'N9', 'C8', 'N7', 'C5', 'C6', "C1'", "O2'", 'N2', 'O6']
 cytosine_atoms = ['N1', 'C2', 'N3', 'C4', 'C5', 'C6', "C1'", 'O2', 'N4', "O2'"]
 uracil_atoms = ['N1', 'C2', 'N3', 'C4', 'C5', 'C6', "C1'", 'O2', 'O4', "O2'"]
+dadenine_atoms = ['N1', 'C2', 'N3', 'C4', 'N9', 'C8', 'N7', 'C5', 'C6', "C1'", "C2'", 'N6']
+dguanine_atoms = ['N1', 'C2', 'N3', 'C4', 'N9', 'C8', 'N7', 'C5', 'C6', "C1'", "C2'", 'N2', 'O6']
+dcytosine_atoms = ['N1', 'C2', 'N3', 'C4', 'C5', 'C6', "C1'", 'O2', 'N4', "C2'"]
+dthymine_atoms = ['N1', 'C2', 'N3', 'C4', 'C5', 'C6', "C1'", 'O2', 'O4', "C2'"]
+dadenine_nucs = ['DA']
+dguanine_nucs = ['DG']
+dcytosine_nucs = ['DC']
+dthymine_nucs = ['DT']
 
 adenine_nucs = ['A', '1MA', 'A2M', '5AA']
 guanine_nucs = ['G', 'M2G', 'G7M', '7MG', 'OMG', '2MG', 'YYG']
 cytosine_nucs = ['C', '5MC', 'OMC']
 uracil_nucs = ['U', 'H2U', 'PSU', '4SU', '5MU', 'OMU', '2MU']
-nuc = ['G', 'C', 'A', 'U', '1MA','A2M','M2G','H2U','7MG','2MU','OMG','5MC','OMC','PSU','4SU','5MU','OMU','2MG', '5AA','YYG', 'G7M'] #List of the 4 possible bases in an RNA molecule
-pur = ['A','G','1MA','A2M','M2G','G7M','OMG','2MG','5AA','YYG','7MG']
-pyri = ['C','U','H2U','5MC','OMC','PSU','4SU','5MU','OMU','2MU'] 
+nuc = ['DG','DA','DC','DT','G', 'C', 'A', 'U', '1MA','A2M','M2G','H2U','7MG','2MU','OMG','5MC','OMC','PSU','4SU','5MU','OMU','2MG', '5AA','YYG', 'G7M'] #List of the 4 possible bases in an RNA molecule
+pur = ['DG','DA','A','G','1MA','A2M','M2G','G7M','OMG','2MG','5AA','YYG','7MG']
+pyri = ['DC','DT','C','U','H2U','5MC','OMC','PSU','4SU','5MU','OMU','2MU'] 
 
 atom5 = ['C4', 'C5', 'N7', 'C8', 'N9'] #List of the atoms in the 5 membered ring of a purine
 atom6 = ['N1', 'C2', 'N3', 'C4', 'C5', 'C6'] #List of the atoms in the 6 membered ring of a purine or a pyrimidine
@@ -42,7 +50,22 @@ face_atom_map = {
 		'H': ['N6', 'N7', 'C8'],
 		'S': ['N3', 'C2', "O2'"],
 	},
+    'DA': {
+     	'W': ['N1', 'C2', 'N6'],
+   		'H': ['N6', 'N7', 'C8'],
+    	'S': ['N3', 'C2', "C2'"],
+	},
     '1MA': {
+		'W': ['N1', 'C2', 'N6'],
+		'H': ['N6', 'N7', 'C8'],
+		'S': ['N3', 'C2', "O2'"],
+	},
+    'A2M': {
+		'W': ['N1', 'C2', 'N6'],
+		'H': ['N6', 'N7', 'C8'],
+		'S': ['N3', 'C2', "O2'"],
+	},
+    '5AA': {
 		'W': ['N1', 'C2', 'N6'],
 		'H': ['N6', 'N7', 'C8'],
 		'S': ['N3', 'C2', "O2'"],
@@ -52,10 +75,65 @@ face_atom_map = {
 		'H': ['O6', 'N7', 'C8'],
 		'S': ['N2', 'N3', "O2'"],
 	},
+	'M2G': {
+		'W': ['N1', 'N2', 'O6'],
+		'H': ['O6', 'N7', 'C8'],
+		'S': ['N2', 'N3', "O2'"],
+	},
+	'7MG': {
+		'W': ['N1', 'N2', 'O6'],
+		'H': ['O6', 'N7', 'C8'],
+		'S': ['N2', 'N3', "O2'"],
+	},
+	'YYG': {
+		'W': ['N1', 'N2', 'O6'],
+		'H': ['O6', 'N7', 'C8'],
+		'S': ['N2', 'N3', "O2'"],
+	},
+	'OMG': {
+		'W': ['N1', 'N2', 'O6'],
+		'H': ['O6', 'N7', 'C8'],
+		'S': ['N2', 'N3', "O2'"],
+	},
+	'2MG': {
+		'W': ['N1', 'N2', 'O6'],
+		'H': ['O6', 'N7', 'C8'],
+		'S': ['N2', 'N3', "O2'"],
+	},
+	'G7M': {
+		'W': ['N1', 'N2', 'O6'],
+		'H': ['O6', 'N7', 'C8'],
+		'S': ['N2', 'N3', "O2'"],
+	},
+    'DG': {
+		'W': ['N1', 'N2', 'O6'],
+		'H': ['O6', 'N7', 'C8'],
+		'S': ['N2', 'N3', "C2'"],
+	},
+    '5MU': {
+		'W': ['O2', 'N3', 'O4'],
+		'H': ['O4', 'N1', 'C6'],
+		'S': ['O2', "O2'"],
+	},
 	'C': {
 		'W': ['O2', 'N3', 'N4'],
 		'H': ['N4', 'C5', 'C6'],
 		'S': ['O2', "O2'"],
+	},
+	'5MC': {
+		'W': ['O2', 'N3', 'N4'],
+		'H': ['N4', 'C5', 'C6'],
+		'S': ['O2', "O2'"],
+	},
+	'OMC': {
+		'W': ['O2', 'N3', 'N4'],
+		'H': ['N4', 'C5', 'C6'],
+		'S': ['O2', "O2'"],
+	},
+    'DC': {
+		'W': ['O2', 'N3', 'N4'],
+		'H': ['N4', 'C5', 'C6'],
+		'S': ['O2', "C2'"],
 	},
     'PSU': {
 		'W': ['O2', 'N3', 'O4'],
@@ -66,7 +144,37 @@ face_atom_map = {
 		'W': ['O2', 'N3', 'O4'],
 		'H': ['O4', 'C5', 'C6'],
 		'S': ['O2', "O2'"],
-	}
+	},
+	'H2U': {
+		'W': ['O2', 'N3', 'O4'],
+		'H': ['O4', 'C5', 'C6'],
+		'S': ['O2', "O2'"],
+	},
+	'2MU': {
+		'W': ['O2', 'N3', 'O4'],
+		'H': ['O4', 'C5', 'C6'],
+		'S': ['O2', "O2'"],
+	},
+	'OMU': {
+		'W': ['O2', 'N3', 'O4'],
+		'H': ['O4', 'C5', 'C6'],
+		'S': ['O2', "O2'"],
+	},
+	'5MU': {
+		'W': ['O2', 'N3', 'O4'],
+		'H': ['O4', 'C5', 'C6'],
+		'S': ['O2', "O2'"],
+	},
+	'4SU': {
+		'W': ['O2', 'N3', 'O4'],
+		'H': ['O4', 'C5', 'C6'],
+		'S': ['O2', "O2'"],
+	},
+     'DT': {
+		'W': ['O2', 'N3', 'O4'],
+		'H': ['O4', 'C5', 'C6'],
+		'S': ['O2', "C2'"],
+	},
 }
 #Digitize the numbers to 4 digits
 def digitize(num):
@@ -172,6 +280,19 @@ for key in list(nucAtoms.keys()):
 	elif nuc in uracil_nucs:
 		if len(nucAtoms[key])<len(uracil_atoms):
 			del nucAtoms[key]
+	elif nuc in dguanine_nucs:
+		if len(nucAtoms[key])<len(dguanine_atoms):
+			del nucAtoms[key]
+	elif nuc in dadenine_nucs:
+		if len(nucAtoms[key])<len(dadenine_atoms):
+			del nucAtoms[key]
+	elif nuc in dcytosine_nucs:
+		if len(nucAtoms[key])<len(dcytosine_atoms):
+			del nucAtoms[key]
+	elif nuc in dthymine_nucs:
+		if len(nucAtoms[key])<len(dthymine_atoms):
+			del nucAtoms[key]
+            
 
 #Loop to calucate the center of the ring, R1, R2 and normal vector to define the mean plane.
 for key in list(nucAtoms.keys()):
