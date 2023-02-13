@@ -14,10 +14,10 @@ pi = math.pi
 
 atom = ['N1', 'N2', 'C2', 'N3', 'N4', 'C4', 'C5', 'C6', 'N6', 'N7', 'C8', 'N9', "C1'", 'O2', "O2'",  "C2'",'O4', 'O6'] #List of all atoms whose coordinates should be extracted
 
-adenine_atoms = ['N1', 'C2', 'N3', 'C4', 'N9', 'C8', 'N7', 'C5', 'C6', "C1'", "O2'", 'N6']
-guanine_atoms = ['N1', 'C2', 'N3', 'C4', 'N9', 'C8', 'N7', 'C5', 'C6', "C1'", "O2'", 'N2', 'O6']
-cytosine_atoms = ['N1', 'C2', 'N3', 'C4', 'C5', 'C6', "C1'", 'O2', 'N4', "O2'"]
-uracil_atoms = ['N1', 'C2', 'N3', 'C4', 'C5', 'C6', "C1'", 'O2', 'O4', "O2'"]
+adenine_atoms = ['N1', 'C2', 'N3', 'C4', 'N9', 'C8', 'N7', 'C5', 'C6', "C1'", "O2'", 'N6',"C2'"]
+guanine_atoms = ['N1', 'C2', 'N3', 'C4', 'N9', 'C8', 'N7', 'C5', 'C6', "C1'", "O2'", 'N2', 'O6',"C2'"]
+cytosine_atoms = ['N1', 'C2', 'N3', 'C4', 'C5', 'C6', "C1'", 'O2', 'N4', "O2'","C2'"]
+uracil_atoms = ['N1', 'C2', 'N3', 'C4', 'C5', 'C6', "C1'", 'O2', 'O4', "O2'","C2'"]
 dadenine_atoms = ['N1', 'C2', 'N3', 'C4', 'N9', 'C8', 'N7', 'C5', 'C6', "C1'", "C2'", 'N6']
 dguanine_atoms = ['N1', 'C2', 'N3', 'C4', 'N9', 'C8', 'N7', 'C5', 'C6', "C1'", "C2'", 'N2', 'O6']
 dcytosine_atoms = ['N1', 'C2', 'N3', 'C4', 'C5', 'C6', "C1'", 'O2', 'N4', "C2'"]
@@ -497,7 +497,6 @@ def get_closest_atom(horizontal_key, verticle_key):
 	
 	verticle_base_nuc = verticle_key.split('_')[1]
 	verticle_key_atoms = '_'.join(verticle_key.split('_')[:3])
-
 	closest_atom_dist = None
 	closest_atom_name = None
 	for verticle_edge in ['W','H','S']:
@@ -508,6 +507,12 @@ def get_closest_atom(horizontal_key, verticle_key):
 			if (not closest_atom_dist) or (atom_dist < closest_atom_dist):
 				closest_atom_dist = atom_dist
 				closest_atom_name = atom
+				for key in list(nucAtoms.keys()):
+					nuc = key.split('_')[1]
+					if nuc in pur:
+						closest_atom_name = closest_atom_name.replace ("O2'", "N3")
+					elif nuc in pyri:
+						closest_atom_name = closest_atom_name.replace ("O2'", "O2")
 	return closest_atom_name
 
 def get_edge(key, wc_edge_centroid, h_edge_centroid, s_edge_centroid):
@@ -520,7 +525,7 @@ def get_edge(key, wc_edge_centroid, h_edge_centroid, s_edge_centroid):
 	s_dist = cal_mod(s_vec)
 
 	if wc_dist < h_dist and wc_dist < s_dist:
-		return ['W', wc_dist]
+		return ['WC', wc_dist]
 	if h_dist < wc_dist and h_dist < s_dist:
 		return ['H', h_dist]
 	if s_dist < wc_dist and s_dist < h_dist:
@@ -544,8 +549,6 @@ def face_orientation_tshape(key1, key2, horizontal, vertical):
 	if horizontal == key2 and vertical == key1:
 		f1,f2 = f2,f1
 	return [f1,f2,face_edge_dist]
-
-	
 
 def check_stack(key1,key2):
 	if key1[:-2]!=key2[:-2]: #If both dont represent the same nucleotide.
@@ -575,7 +578,6 @@ def check_stack(key1,key2):
 					f = face_orientation_tshape(key1,key2,horizontal,vertical)
 					return [True,format(d,'.4f'),theta,taui,tauj,c_d,c_t,f[:2],f[-1],horizontal,vertical]
 	return [False]
-
 """
 y-axis for pyrimidine is in the direction of projection of vector joining center and N3 atom on the plane.
 y-axis for 5/6 membered ring of purine is in the direction of projection of vector joining center and N1 atom on the corresponding plane.
